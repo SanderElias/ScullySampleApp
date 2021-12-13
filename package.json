@@ -1,0 +1,43 @@
+{
+  "name": "acm-nov2021",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "scully": "npx scully --scanRoutes --RSD",
+    "scully:serve": "npx scully serve --handle404 index --tds",
+    "server": "cd server && tsc-watch --noClear -p tsconfig.server.json --onSuccess 'node ./server.mjs' "
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "~13.1.0",
+    "@angular/common": "~13.1.0",
+    "@angular/compiler": "~13.1.0",
+    "@angular/core": "~13.1.0",
+    "@angular/forms": "~13.1.0",
+    "@angular/platform-browser": "~13.1.0",
+    "@angular/platform-browser-dynamic": "~13.1.0",
+    "@angular/router": "~13.1.0",
+    "@scullyio/init": "^2.0.1",
+    "@scullyio/ng-lib": "^2.0.0",
+    "@scullyio/scully": "^2.0.0",
+    "@scullyio/scully-plugin-docs-link-update": "^2.0.0",
+    "@types/jsdom": "^16.2.13",
+    "jsdom": "^18.0.0",
+    "marked": "^3.0.7",
+    "rxjs": "^7.4.0",
+    "tsc-watch": "^4.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~13.1.1",
+    "@angular/cli": "~13.1.1",
+    "@angular/compiler-cli": "~13.1.0",
+    "@ngneat/aim": "^2.0.0",
+    "@types/node": "^14.17.27",
+    "typescript": "~4.5.3"
+  }
+}

@@ -1,0 +1,46 @@
+****************************************************************************************
+This is a development tool for Scully applications.
+You can ignore the warning (TLS) or run scully with --no-warning
+****************************************************************************************No configuration for route "/users/:id" found. Skipping
+****************************************************************************************
+This is a development tool for Scully applications.
+You can ignore the warning (TLS) or run scully with --no-warning
+****************************************************************************************No configuration for route "/users/:id" found. Skipping
+No configuration for route "/users/:id" found. Skipping
+
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------No configuration for route "/users/:id" found. Skipping
+
+
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------No configuration for route "/users/:id" found. Skipping
+
+
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------No configuration for route "/users/:id" found. Skipping
+
+****************************************************************************************
+This is a development tool for Scully applications.
+You can ignore the warning (TLS) or run scully with --no-warning
+****************************************************************************************
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------No configuration for route "/users/:id" found. Skipping
+
+
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------
+
+----------------------------------
+Using stored unhandled routes!.
+   To discover new routes in the angular app use "npm run scully -- --scanRoutes"
+----------------------------------

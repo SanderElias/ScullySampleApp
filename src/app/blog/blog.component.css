@@ -1,0 +1,16 @@
+h1:nth-child(1) {
+  color:#b1acac;
+}
+h1:nth-child(1)::first-letter {
+  color:white;
+  font-size: larger;
+}
+
+:host {
+  display: block;
+  max-width: 30rem;
+}
+
+p {
+  line-height: 1.2em;
+}
