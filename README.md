@@ -4,8 +4,8 @@
 
 The base of the app is generatied with those commands:
 ```bash
-npx @angular/cli@latest new ACM-Nov2021  --routing --style css --minimal --strict
-cd ACM-Nov2021
+npx @angular/cli@latest new scully-sample-app  --routing --style css --minimal --strict
+cd scully-sample-app
 npx ng g m home --route home --module app.module 
 npx ng g m about --route about --module app.module
 npx ng g m users --route users --module app.module

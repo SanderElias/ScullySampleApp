@@ -1,0 +1,11 @@
+identifier: k9xe42o010tdhaw1
+appPort: 1864
+staticPort: 1668
+reloadPort: 2667
+hostName: localhost
+projectName: scully-sample-app
+homeFolder: /home/sander/Documents/werk/ScullySampleApp
+distFolder: dist/scully-sample-app
+outDir: /home/sander/Documents/werk/ScullySampleApp/dist/static
+handle404: ""
+allowErrorCollect: true

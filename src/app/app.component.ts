@@ -18,5 +18,5 @@ import { Component } from '@angular/core';
   styles: [``]
 })
 export class AppComponent {
-  title = 'ACM-Nov2021';
+  title = 'scully-sample-app';
 }
