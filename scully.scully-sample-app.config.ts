@@ -26,7 +26,8 @@ export const config: ScullyConfig = {
   projectName: "scully-sample-app",
   outDir: './dist/static',
   spsModulePath: './src/app/app.sps.module.ts',
-  maxRenderThreads: cpus().length * 2,
+  /** netlify likes to haev some spare room */
+  maxRenderThreads: cpus().length - 2,
   routes: {
     '/blog/:slug': {
       type: 'contentFolder',
