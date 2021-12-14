@@ -60,7 +60,7 @@ export class ProductDetailComponent implements OnInit {
   ))
 
   vm$ = this.product$.pipe(
-    map()
+    map(pr => pr)
   )
 
   constructor(private prod: ProductsService, private tss: TransferStateService, private route: ActivatedRoute) { }

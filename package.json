@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "scully": "npx scully --scanRoutes --RSD",
     "scully:serve": "npx scully serve --handle404 index --tds",
-    "server": "cd server && tsc-watch --noClear -p tsconfig.server.json --onSuccess 'node ./server.mjs' "
+    "server": "cd server && tsc-watch --noClear -p tsconfig.server.json --onSuccess 'node ./server.mjs' ",
+    "deploy": "npx ng build && npx scully --tds"
   },
   "private": true,
   "dependencies": {
