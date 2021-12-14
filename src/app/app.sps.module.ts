@@ -1,8 +1,8 @@
-import { enableProdMode, NgModule } from '@angular/core';
+import { enableProdMode, NgModule, OnInit } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ScullyPlatformServerModule } from '@scullyio/platform-server';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
-import { ScullyPlatformServerModule } from '@scullyio/platform-server'
-import { BrowserModule } from '@angular/platform-browser';
 
 
 /**
@@ -20,4 +20,11 @@ enableProdMode();
   providers: [],
   bootstrap: [AppComponent],
 })
-export default class AppSPSModule {}
+export default class AppSPSModule implements OnInit {
+  constructor() {
+  }
+
+  ngOnInit(): void {
+    setTimeout(() => console.log('done'), 500)
+  }
+}

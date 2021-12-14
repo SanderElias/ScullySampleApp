@@ -64,7 +64,7 @@ registerPlugin('beforeAll', 'netlifyPrepare', async () => {
   })
   logOk('start up data server')
   const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });  
-  await new Promise(r => setTimeout(() => r(undefined), 1500))  
+  await new Promise(r => setTimeout(() => r(undefined), .2 * 60 * 1000))  
   startProgress()
 
   logOk('data server started')

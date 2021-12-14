@@ -1,22 +1,27 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { BlogComponent } from './blog.component';
+import { SelectComponent } from './select/select.component';
 
-import {BlogComponent} from './blog.component';
 
 const routes: Routes = [
   {
-    path: ':slug',
-    component: BlogComponent,
-  },
-  {
-    path: '**',
-    component: BlogComponent,
-  }
-];
+    path: '', component: SelectComponent, children: [
+      {
+        path: ':slug',
+        component: BlogComponent,
+      },
+      {
+        path: '**',
+        component: BlogComponent,
+      }
+    ]
+  }];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), CommonModule],
   exports: [RouterModule],
 })
-export class BlogRoutingModule {}
+export class BlogRoutingModule { }
 
