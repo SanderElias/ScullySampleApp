@@ -1,25 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isScullyGenerated, isScullyRunning } from '@scullyio/ng-lib';
-import { map, shareReplay, take } from 'rxjs';
+import { map, shareReplay } from 'rxjs';
 
+// const server = 'http://[2001:41f0:198:0:3034:f593:acdc:acdc]:8201'
+const server = 'http://localhost:8201'
+const endpoint = 'house'
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
-  productIds$ = this.http.get<Product['id'][]>('http://localhost:8201/house?field=id').pipe(
+  productIds$ = this.http.get<Product['id'][]>(`${server}/${endpoint}?field=id`).pipe(
     shareReplay({ refCount: false, bufferSize: 1 })
   );
-  products$ = this.http.get<Product[]>('http://localhost:8201/house').pipe(
+  products$ = this.http.get<Product[]>(`${server}/${endpoint}`).pipe(
     shareReplay({ refCount: false, bufferSize: 1 })
   );
-  subCategories$ = this.http.get<Product[]>('http://localhost:8201/house?unique=subcategory')
+  subCategories$ = this.http.get<Product[]>(`${server}/${endpoint}?unique=subcategory`)
 
   constructor(private http: HttpClient) {
-    // if (!isScullyRunning()) {
-    //   /** prefetch products so those are ready for the customer give app a buit of time to settle first */
-    //   setTimeout(() => this.products$.pipe(take(1)).subscribe(), 50)
-    // }
+
   }
 
   getIdsByFilter(filter: Partial<Product>, pageLength = 20) {
@@ -40,8 +39,8 @@ export class ProductsService {
       ))
   }
 
-  getProduct(id: number|string) {
-    return this.http.get<Product[]>(`http://localhost:8201/house/${id}`)
+  getProduct(id: number | string) {
+    return this.http.get<Product[]>(`${server}/${endpoint}/${id}`)
   }
 
   getBrands() {

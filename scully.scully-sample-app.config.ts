@@ -22,7 +22,7 @@ export const config: ScullyConfig = {
   projectName: "scully-sample-app",
   outDir: './dist/static',
   spsModulePath: './src/app/app.sps.module.ts',
-  maxRenderThreads: cpus().length * 2,
+  maxRenderThreads: cpus().length - 2,
   routes: {
     '/blog/:slug': {
       type: 'contentFolder',
@@ -62,11 +62,11 @@ registerPlugin('beforeAll', 'netlifyPrepare', async () => {
       r(undefined)
     })
   })
-  logOk('start up data server')
+  // logOk('start up data server')
   const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });  
-  await new Promise(r => setTimeout(() => r(undefined), .2 * 60 * 1000))  
+  // give the server 5 seconds to start
+  await new Promise(r => setTimeout(() => r(undefined), 5 * 1000))  
   startProgress()
-
   logOk('data server started')
 
 }, -100)
