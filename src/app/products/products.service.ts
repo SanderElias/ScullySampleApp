@@ -8,7 +8,7 @@ const endpoint = 'house'
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class ProductsServerService {
   productIds$ = this.http.get<Product['id'][]>(`${server}/${endpoint}?field=id`).pipe(
     shareReplay({ refCount: false, bufferSize: 1 })
   );
@@ -55,6 +55,61 @@ export class ProductsService {
     )
   }
 }
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductsService {
+  loc = '/assets/house.json'
+  products$ = this.http.get<Product[]>(`${this.loc}`).pipe(
+    map(pl => pl.filter(isProduct)),
+    shareReplay({ refCount: false, bufferSize: 1 })
+  );
+  productIds$ = this.products$.pipe(
+    map(pl => pl.map(row => row.id)),
+    shareReplay({ refCount: false, bufferSize: 1 })
+  );
+  subCategories$ = this.products$.pipe(
+    map(pl => Array.from(pl.reduce((s, pl) => s.add(pl.subcategory), new Set<string>())))
+  )
+
+  constructor(private http: HttpClient) {
+
+  }
+
+  getIdsByFilter(filter: Partial<Product>, pageLength = 20) {
+    return this.products$.pipe(
+      map(pl => {
+        const matchRow = createMatcher(filter)
+        const found = [] as number[];
+        for (const row of pl) {
+          if (isProduct(row) && matchRow(row)) {
+            found.push(row.id)
+          }
+          if (found.length === pageLength) {
+            break;
+          }
+        }
+        return found;
+      }
+      ))
+  }
+
+  getProduct(id: number | string) {
+    return this.products$.pipe(map(pl => pl.find(row => row.id === +id)))
+  }
+
+  getBrands() {
+    return this.products$.pipe(
+      map(pl => Array.from(pl.reduce((s, pl) => s.add(pl.brand), new Set<string>())))
+    )
+  }
+
+  getProductsByBrand(brand: string) {
+    return this.products$.pipe(
+      map(pl => pl.filter(row => row.brand === brand))
+    )
+  }
+}
 
 function createMatcher(filter: Partial<Product>) {
   return (row: Product) => {
@@ -74,7 +129,7 @@ function createMatcher(filter: Partial<Product>) {
 }
 
 export function isProduct(p: any): p is Product {
-  return p.id !== undefined;
+  return !isNaN(+p.id) ;
 }
 
 

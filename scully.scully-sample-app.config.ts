@@ -1,11 +1,8 @@
-import { ScullyConfig, enableSPS, registerPlugin, logOk, stopProgress, startProgress } from '@scullyio/scully';
-import { folder } from '@scullyio/scully/src/lib/utils/cli-options';
-import { exec, fork } from 'child_process';
+import { enableSPS, HandledRoute, registerPlugin, routeSplit, ScullyConfig } from '@scullyio/scully';
+import { readFileSync } from 'fs';
 import { cpus } from 'os';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-// import { docLink } from '@scullyio/scully-plugin-docs-link-update';
-import { docToc } from './scully/docToc.plugin';
 // import "@scullyio/scully-plugin-puppeteer"
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -14,7 +11,14 @@ enableSPS();
 
 
 // const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });
-
+registerPlugin('router', 'loadFromFile', async (route, config) => {
+  if (!route) {
+    return [];
+  }
+  const data = JSON.parse(readFileSync(join(__dirname, './src/assets/house.json'), 'utf-8')).map((row: any) => row.id as number).slice(0, 2500);
+  const { params, createPath } = routeSplit(route);
+  return data.map((id: number) => ({ route: createPath(`${id}`) } as HandledRoute));
+});
 
 
 export const config: ScullyConfig = {
@@ -22,7 +26,7 @@ export const config: ScullyConfig = {
   projectName: "scully-sample-app",
   outDir: './dist/static',
   spsModulePath: './src/app/app.sps.module.ts',
-  maxRenderThreads: cpus().length - 2,
+  maxRenderThreads: cpus().length * 2,
   routes: {
     '/blog/:slug': {
       type: 'contentFolder',
@@ -40,11 +44,11 @@ export const config: ScullyConfig = {
       },
     },
     '/products/:id': {
-      type: 'json',
+      type: 'loadFromFile',
       id: {
         url: 'http://localhost:8201/house?field=id',
         /** limit to the first 25 users to save time */
-        resultsHandler: (raw: number[]) => raw.slice(0, 500).map(id => ({ id })),
+        resultsHandler: (raw: number[]) => raw.slice(0, 1500).map(id => ({ id })),
         property: 'id',
       },
     }
@@ -53,20 +57,20 @@ export const config: ScullyConfig = {
 
 
 registerPlugin('beforeAll', 'netlifyPrepare', async () => {
-  stopProgress()
-  logOk('compile server')
-  await new Promise(r => {
-    const tsConf = join(__dirname, './server/tsconfig.server.json')
-    exec(`npx tsc -p ${tsConf}`, () => {
-      logOk('Server is compiled')
-      r(undefined)
-    })
-  })
-  // logOk('start up data server')
-  const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });  
-  // give the server 5 seconds to start
-  await new Promise(r => setTimeout(() => r(undefined), 5 * 1000))  
-  startProgress()
-  logOk('data server started')
+  // stopProgress()
+  // logOk('compile server')
+  // await new Promise(r => {
+  //   const tsConf = join(__dirname, './server/tsconfig.server.json')
+  //   exec(`npx tsc -p ${tsConf}`, () => {
+  //     logOk('Server is compiled')
+  //     r(undefined)
+  //   })
+  // })
+  // // logOk('start up data server')
+  // const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });  
+  // // give the server 5 seconds to start
+  // await new Promise(r => setTimeout(() => r(undefined), 5 * 1000))  
+  // startProgress()
+  // logOk('data server started')
 
 }, -100)
