@@ -50,3 +50,4 @@ scully.scully-sample-app.config.js
 .angular
 scully/runtime
 src/assets/scully-routes.json
+scully.log

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
-import { Product, ProductsService } from './products.service';
+import { TransferStateService } from '@scullyio/ng-lib';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, merge, Observable, ReplaySubject, startWith, switchMap, take } from 'rxjs';
+import { ProductsService } from './products.service';
 
 @Component({
   selector: 'app-products',
@@ -20,9 +21,7 @@ import { Product, ProductsService } from './products.service';
         <option *ngFor="let cat of vm.subCats">{{cat}}</option>
       </datalist>
       <table *ngIf="vm.products.length else notFound">
-        <tr *ngFor="let prod of vm.products">
-          <td>{{prod.subcategory}}</td>
-          <td [highlight]="vm.search">{{prod.name}}</td>
+        <tr *ngFor="let prod of vm.products" [productId]="prod" [search]="vm.search">
         </tr>
       </table>
       <ng-template #notFound>
@@ -42,53 +41,39 @@ import { Product, ProductsService } from './products.service';
   `]
 })
 export class ProductsComponent implements OnInit {
-  subcatSelected$ = new BehaviorSubject<string>('');
-  searchFor$ = new BehaviorSubject<string>('');
-  subCategories$ = this.prods.subCategories$;
-
-
-  vm$ = combineLatest({
-    selected: this.subcatSelected$.pipe(
-      debounceTime(200),
-      distinctUntilChanged()
-    ),
-    subCats: this.subCategories$,
-    search: this.searchFor$.pipe(
-      map(r => r.toLowerCase()),
-      debounceTime(200),
-      distinctUntilChanged()
-    ),
-    prodCount: this.prods.products$.pipe(map(r => r.length)),
-    catCount: this.subCategories$.pipe(map(l => l.length)),
-    products: this.prods.products$
-  }).pipe(
-    map(({ products, search, selected, ...rest }) => {
-      if (search || selected) {
-        const found = [] as Product[];
-        let count = 0
-        while (found.length < 20 && count < products.length) {
-          const prod = products[count]
-          try {
-            if (prod &&
-              (selected === '' || prod.subcategory === selected) &&
-              (search === '' || prod.name?.toLowerCase()?.includes(search))
-            ) {
-              found.push(prod)
-            }
-          } catch {
-            // if somehow the product is malformed, we want to ignore it.
-          }
-          count += 1;
-        }
-        products = found
-      }
-
-
-      return { products: products.slice(0, 20), search, ...rest }
-    })
+  subcatSelected$ = new BehaviorSubject('');
+  searchFor$ = new ReplaySubject<string>(1);
+  subCategories$ = this.tss.useScullyTransferState('subcat', this.prods.subCategories$);
+  deb = <T>(obs: Observable<T>, name?: string) => obs.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+  )
+  debStart = <T>(obs: Observable<T>, name?: string) => obs.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    startWith('')
   )
 
-  constructor(private prods: ProductsService) { }
+  products$ = merge(
+    /** get the first 20 without waiting for user input */
+    this.tss.useScullyTransferState('prodIds', this.prods.productIds$.pipe(take(1), map(rows => rows.slice(0, 20)))),
+    combineLatest({
+      name: this.deb(this.searchFor$),
+      subcategory: this.deb(this.subcatSelected$),
+    }).pipe(
+      switchMap(filter => this.prods.getIdsByFilter(filter)),
+    )
+  );
+
+  vm$ = combineLatest({
+    search: this.debStart(this.searchFor$),
+    subCats: this.subCategories$,
+    prodCount: this.products$.pipe(map(r => r.length), take(1)),
+    catCount: this.subCategories$.pipe(map(l => l.length), take(1)),
+    products: this.products$.pipe()
+  })
+
+  constructor(private prods: ProductsService, private tss: TransferStateService) { }
 
   ngOnInit(): void {
   }

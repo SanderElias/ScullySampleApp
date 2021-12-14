@@ -4,11 +4,11 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "importHelpers": false,
-    "lib": ["ES2019", "dom"],
+    "lib": ["es2021", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es2018",
+    "target": "es2021",
     "types": ["node"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,

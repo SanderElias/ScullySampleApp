@@ -1,22 +1,29 @@
 import { readdirSync, readFileSync } from 'fs';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, URL } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 const files = readdirSync(join(__dirname, "../data/")).map(name => ({ name: name.replace('.csv', ''), fullPath: join(__dirname, '../data/', name) }));
-console.table(files)
 
 const memCache = new Map<string, any[]>()
 for (const file of files) {
   memCache.set(file.name, loadData(file.fullPath))
 }
+console.table([...memCache.entries()].map(([endpoint, value]) => ({ endpoint, rows: value.length })))
 console.log('loaded all, ready to serve')
 
+interface UrlOptions {
+  unique?: string;
+  field?: string
+}
+
 createServer(function (request, response) {
-  const [_dummy, category, id] = request.url?.split('/') || [];
+  const url = new URL(request.url ?? '', 'http://localhost:8001');
+  const [_dummy, category, id] = url.pathname?.split('/') || [];
+  const { unique, field } = Array.from(url.searchParams.entries()).reduce((a, [key, value]) => ({ ...a, [key]: value }), {} as UrlOptions);
   const file = files.find(({ name }) => name === category)?.fullPath
   if (file) {
     if (!memCache.has(category)) {
@@ -27,10 +34,30 @@ createServer(function (request, response) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': request.headers.origin || '*',
     });
-    response.end(JSON.stringify(dataset))
-    return
-  }
 
+    if (!id) {
+      return response.end(JSON.stringify(dataset?.reduce((result,row)=> {
+        if (field) {
+          result.push(row[field])
+        } else if (unique) {
+          const fieldData = row[unique];
+          if (!result.includes(fieldData)) {
+            result.push(fieldData)
+          }
+        } else {
+          result.push(row)
+        }
+        return result;
+      },[])));
+    }
+    const result = dataset?.find((row) => row.id === +id)
+    if (result) { return response.end(JSON.stringify(result)); }
+    response.writeHead(404, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': request.headers.origin || '*',
+    });
+    return response.end(JSON.stringify({ error: `no data found for id ${id}` }));
+  }
 
 
 

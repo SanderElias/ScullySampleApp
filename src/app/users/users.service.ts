@@ -37,7 +37,7 @@ export class UsersService {
   }
 
   setSortTo(sortProp: keyof User) {
-    console.log({ sortProp })
+    // console.log({ sortProp })
     this.sortProp.next(sortProp)
   }
 }

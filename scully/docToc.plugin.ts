@@ -46,7 +46,7 @@ function findComment(window: any, rootElem: HTMLElement, comment: string) {
   var iterator = document.createNodeIterator(rootElem, NodeFilter.SHOW_COMMENT, filterNone);
   var curNode;
   while (curNode = iterator.nextNode()) {
-    console.log(curNode.nodeValue);
+    // console.log(curNode.nodeValue);
     if (curNode?.nodeValue?.indexOf(comment) !== -1) {
       return curNode;
     }

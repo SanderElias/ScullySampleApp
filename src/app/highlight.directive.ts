@@ -31,6 +31,7 @@ export class HighlightDirective {
     const elm = this.elmRef.nativeElement as HTMLElement
     if (elm && elm.textContent) {
       if (text) {
+        // TODO: make highlighting case insensitive.
         const newHtml = elm.textContent.split(text).join(`<span class="highlight">${text}</span>`)
         if (newHtml) {
           elm.innerHTML = newHtml

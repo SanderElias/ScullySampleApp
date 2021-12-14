@@ -30,7 +30,6 @@
     "@types/jsdom": "^16.2.13",
     "jsdom": "^18.0.0",
     "marked": "^3.0.7",
-    "puppeteer": "^13.0.0",
     "rxjs": "^7.4.0",
     "tsc-watch": "^4.5.0",
     "tslib": "^2.3.0",

@@ -46,7 +46,7 @@ export class UserComponent implements OnInit {
       users: this.users.users$,
       id: this.route.params.pipe(pluck('id'))
     }).pipe(
-      tap(user => console.log(user)),
+      // tap(user => console.log(user)),
       map(({ users, id }) => users.find(user => user.id === +id)),
     )
   )
