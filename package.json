@@ -23,7 +23,7 @@
     "@angular/router": "~13.1.0",
     "@scullyio/init": "^2.0.5-BETA.130515",
     "@scullyio/ng-lib": "^2.0.2-BETA.130515",
-    "@scullyio/platform-server": "file:../scully/dist/libs/platform-server/scullyio-platform-server-0.0.1.tgz",
+    "@scullyio/platform-server": "file:scullyio-platform-server-0.0.1.tgz",
     "@scullyio/scully": "^2.0.3-BETA.130515",
     "@scullyio/scully-plugin-docs-link-update": "^2.0.1-BETA.130515",
     "@scullyio/scully-plugin-puppeteer": "^2.0.1-BETA.130515",
