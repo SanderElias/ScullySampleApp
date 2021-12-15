@@ -45,7 +45,15 @@ export class ProductsServerService {
 
   getBrands() {
     return this.products$.pipe(
-      map(pl => Array.from(pl.reduce((s, pl) => s.add(pl.brand), new Set<string>())))
+      map(pl => (pl.reduce((s, pl) => {
+        const p = s.find(x => x.name === pl.brand)
+        if (p) {
+          p.count++;
+        } else {
+          s.push({ name: pl.brand, count: 1 })
+        }
+        return s;
+      }, [] as { name: string, count: number }[])))
     )
   }
 
@@ -61,7 +69,7 @@ export class ProductsServerService {
 export class ProductsService {
   loc = '/assets/house.json'
   products$ = this.http.get<Product[]>(`${this.loc}`).pipe(
-    map(pl => pl.filter(isProduct)),
+    map(pl => pl.filter(isValidProduct)),
     shareReplay({ refCount: false, bufferSize: 1 })
   );
   productIds$ = this.products$.pipe(
@@ -100,13 +108,26 @@ export class ProductsService {
 
   getBrands() {
     return this.products$.pipe(
-      map(pl => Array.from(pl.reduce((s, pl) => s.add(pl.brand), new Set<string>())))
+      map(pl => (pl.reduce((s, pl) => {
+        const p = s.find(x => x.name === pl.brand)
+        if (p) {
+          p.count++;
+        } else {
+          s.push({ name: pl.brand, count: 1 })
+        }
+        return s;
+      }, [] as { name: string, count: number }[])))
     )
   }
 
+  getProductsBySubcategory(cat: string) {
+    return this.products$.pipe(
+      map(pl => pl.filter(row => row.subcategory === cat).map(({ id, variation_0_thumbnail }) => ({ id, thumb:variation_0_thumbnail })))
+    )
+  }
   getProductsByBrand(brand: string) {
     return this.products$.pipe(
-      map(pl => pl.filter(row => row.brand === brand))
+      map(pl => pl.filter(row => row.brand === brand).map(({ id, variation_0_thumbnail }) => ({ id, thumb:variation_0_thumbnail })))
     )
   }
 }
@@ -128,8 +149,17 @@ function createMatcher(filter: Partial<Product>) {
   };
 }
 
+/** make sure we have nice products that include needed details for demo */
+export function isValidProduct(row: unknown): row is Product {
+  return !!(isProduct(row) &&
+    row.raw_price > 0 &&
+    row.variation_0_color && row.variation_0_thumbnail && row.variation_0_image &&
+    row.variation_1_color && row.variation_1_thumbnail && row.variation_1_image &&
+    row.brand && !row.brand.startsWith('http'));
+}
+
 export function isProduct(p: any): p is Product {
-  return !isNaN(+p.id) ;
+  return !isNaN(+p.id);
 }
 
 

@@ -51,3 +51,4 @@ scully.scully-sample-app.config.js
 scully/runtime
 src/assets/scully-routes.json
 scully.log
+scully.scully-sample-app.config.mjs

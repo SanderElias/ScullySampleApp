@@ -1,29 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { TransferStateService } from '@scullyio/ng-lib';
 import { ProductsService } from '../products.service';
+import { BrandOverviewComponent } from './brand-overview/brand-overview.component';
 
 @Component({
   selector: 'app-brands',
   template: `
   <h1>Available Brands</h1>
-  <a [routerLink]="['/products']">Back to Products</a>
-  <a class="brand" *ngFor="let brand of brands$|async" [routerLink]="['.',brand]">
-    <ng-container *ngIf="brand?.startsWith('http') else textVersion">
-      <img [src]="brand" alt="{{brand}}" />
-    </ng-container>
-    <ng-template #textVersion>
-      {{brand}}
-    </ng-template>
+  <a *ngFor="let brand of brands$|async" [routerLink]="['.',brand.name]">
+    <span>{{brand.name}}</span>
+    <span>{{brand.count}}</span>
+    <span>products</span>
   </a>
-
   `,
   styles: [`
-  .brand {    
-    display: inline-block;
+  a {    
+    display: grid;   
+    float: left; 
     /* border: 1px solid #ccc; */
+    background-color: #ffffff05;
     width: 100px;
-    margin: 4px
+    height: 100px;
+    margin: 4px;
+    decoration: none;
+    grid-template-rows: 1.5em 1fr 1.5em;
+    text-align: center;
+    text-decoration: none;
+    justify-items: center;
+    align-items: center;
+    color: #eee;
+  }
+  span:nth-child(2) {
+    display: block;    
+    font-size: 3em;
+    color:#fff;
   }
   .brand img {
     width: 32px;
@@ -33,9 +45,9 @@ import { ProductsService } from '../products.service';
   `]
 })
 export class BrandsComponent implements OnInit {
-  brands$ = this.prod.getBrands();
+  brands$ = this.tss.useScullyTransferState('brand', this.prod.getBrands());
 
-  constructor(private prod: ProductsService) { }
+  constructor(private prod: ProductsService, private tss: TransferStateService) { }
 
   ngOnInit(): void {
   }
@@ -43,8 +55,11 @@ export class BrandsComponent implements OnInit {
 }
 
 @NgModule({
-  declarations: [BrandsComponent],
-  imports: [RouterModule.forChild([{ path: '', component: BrandsComponent }]), CommonModule],
+  declarations: [BrandsComponent, BrandOverviewComponent],
+  imports: [RouterModule.forChild([
+    { path: '', component: BrandsComponent, pathMatch: 'full' },
+    { path: ':name', component: BrandOverviewComponent }
+  ]), CommonModule],
   exports: [BrandsComponent]
 })
 export class BrandsComponentModule {

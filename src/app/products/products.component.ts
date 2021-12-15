@@ -20,7 +20,7 @@ import { ProductsService } from './products.service';
       <datalist id='subcats'>
         <option *ngFor="let cat of vm.subCats">{{cat}}</option>
       </datalist>
-      <table *ngIf="vm.products.length else notFound">
+      <table *ngIf="vm.products.length else notFound" >
         <tr *ngFor="let prod of vm.products" [productId]="prod" [search]="vm.search">
         </tr>
       </table>
@@ -56,7 +56,7 @@ export class ProductsComponent implements OnInit {
 
   products$ = merge(
     /** get the first 20 without waiting for user input */
-    this.tss.useScullyTransferState('prodIds', this.prods.productIds$.pipe(take(1), map(rows => rows.slice(0, 20)))),
+    this.tss.useScullyTransferState('prodIds', this.prods.productIds$.pipe(take(1))),
     combineLatest({
       name: this.deb(this.searchFor$),
       subcategory: this.deb(this.subcatSelected$),
@@ -70,7 +70,7 @@ export class ProductsComponent implements OnInit {
     subCats: this.subCategories$,
     prodCount: this.products$.pipe(map(r => r.length), take(1)),
     catCount: this.subCategories$.pipe(map(l => l.length), take(1)),
-    products: this.products$.pipe()
+    products: this.products$.pipe(map(rows => rows.slice(0, 20)))
   })
 
   constructor(private prods: ProductsService, private tss: TransferStateService) { }

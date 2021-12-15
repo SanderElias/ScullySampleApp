@@ -9,15 +9,30 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 enableSPS();
 
 
+/** 
+ * normally, you will get the data from en server endpoint
+ * but in this example we use the data from the file system
+ */
+const dataset = JSON.parse(readFileSync(join(__dirname, './src/assets/house.json'), 'utf-8'))
 
-// const cp = fork(join(__dirname, "./server/server.mjs"), [], { stdio: [0, 1, 2, 'ipc'] });
-registerPlugin('router', 'loadFromFile', async (route, config) => {
-  if (!route) {
-    return [];
-  }
-  const data = JSON.parse(readFileSync(join(__dirname, './src/assets/house.json'), 'utf-8')).map((row: any) => row.id as number).slice(0, 2500);
+/** 
+ * minimal plugin to maker routes fer every product in the dataset
+ */
+registerPlugin('router', 'getProductRoutes', async (route, config) => {
+  if (!route) return [];
+  const data = dataset.map((row: any) => row.id as number) //.slice(0, 500);
   const { params, createPath } = routeSplit(route);
   return data.map((id: number) => ({ route: createPath(`${id}`) } as HandledRoute));
+});
+
+/** 
+ * minimal plugin to extract available brands from the dataset
+ */
+registerPlugin('router', 'getBrandRoutes', async (route, config) => {
+  if (!route) return [];
+  const data: Set<string> = dataset.reduce((r: Set<string>, row: any) => r.add(row.brand), new Set<string>()) //.slice(0, 500);
+  const { params, createPath } = routeSplit(route);
+  return Array.from(data.values()).map(id => ({ route: createPath(`${id}`) } as HandledRoute));
 });
 
 
@@ -27,7 +42,7 @@ export const config: ScullyConfig = {
   outDir: './dist/static',
   spsModulePath: './src/app/app.sps.module.ts',
   /** netlify likes to haev some spare room */
-  maxRenderThreads: cpus().length - 2,
+  maxRenderThreads: cpus().length * 2,
   routes: {
     '/blog/:slug': {
       type: 'contentFolder',
@@ -35,23 +50,23 @@ export const config: ScullyConfig = {
         folder: "./blog"
       }
     },
+    /** this route uses the scully-build in test data server to get users. */
     '/users/:id': {
       type: 'json',
       id: {
         url: 'http://localhost:8200/users',
         /** limit to the first 25 users to save time */
-        resultsHandler: (raw: any[]) => raw.filter((row) => row.id < 25),
+        // resultsHandler: (raw: any[]) => raw.filter((row) => row.id < 25),
         property: 'id',
       },
     },
+    /** uses the plugin defined above to get products */
     '/products/:id': {
-      type: 'loadFromFile',
-      id: {
-        url: 'http://localhost:8201/house?field=id',
-        /** limit to the first 25 users to save time */
-        resultsHandler: (raw: number[]) => raw.slice(0, 1500).map(id => ({ id })),
-        property: 'id',
-      },
+      type: 'getProductRoutes',
+    },
+    /** uses the plugin defined above to get brands */
+    '/brand/:name': {
+      type: 'getBrandRoutes',
     }
   }
 };

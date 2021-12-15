@@ -52,10 +52,10 @@ export function scullyReadyEventFiredFactory(doc: Document, ngZone: NgZone): () 
           // console.log((<any>ngZone)._zoneDelegate._taskCounts)
           if (ngZone.hasPendingMacrotasks) {
             // logWarn(`pending tasks.`);
-            return setTimeout(monitor, 50);
+            return setTimeout(monitor, 25);
           }
           if (!fired) {
-            return setTimeout(monitor, 50);
+            return setTimeout(monitor, 25);
           }
           return setTimeout(() => resolve(), 5);
         }
