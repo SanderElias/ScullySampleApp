@@ -1,8 +1,8 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TransferStateService } from '@scullyio/ng-lib';
-import { filter, firstValueFrom, map, Observable, pluck, ReplaySubject, subscribeOn, switchMap, tap } from 'rxjs';
-import { isProduct, ProductsService, Product } from '../products.service';
+import { filter, firstValueFrom, map, Observable, ReplaySubject, switchMap, tap } from 'rxjs';
+import { isProduct, Product, ProductsService } from '../products.service';
 
 @Component({
   selector: 'tr [productId]',
@@ -24,14 +24,14 @@ import { isProduct, ProductsService, Product } from '../products.service';
   
   `]
 })
-export class ProductRowComponent implements OnInit {
+export class ProductRowComponent implements OnDestroy {
   prodId$ = new ReplaySubject<number>(1);
   @HostListener('click') async onClick() {
     const id = await firstValueFrom(this.prodId$);
     this.router.navigate(['/products', id]);
   }
   @Input() search = '';
-  @Input('productId') set productId(x: number) {
+  @Input() set productId(x: number) {
     if (typeof x === 'number') {
       this.prodId$.next(x);
     }
@@ -53,8 +53,6 @@ export class ProductRowComponent implements OnInit {
 
   constructor(private prd: ProductsService, private tss: TransferStateService, private router: Router) { }
 
-  ngOnInit(): void {
-  }
 
   ngOnDestroy() {
     this.subs.unsubscribe();

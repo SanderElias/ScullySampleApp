@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TransferStateService } from '@scullyio/ng-lib';
 import { UsersService } from '../users/users.service';
 
@@ -16,7 +16,7 @@ import { UsersService } from '../users/users.service';
     }
   `]
 })
-export class UserSearchComponent implements OnInit {
+export class UserSearchComponent {
   users$ = this.tss.useScullyTransferState('userSearch', this.users.filteredUsers$)
 
   constructor(
@@ -24,7 +24,6 @@ export class UserSearchComponent implements OnInit {
     private tss: TransferStateService
   ) { }
 
-  ngOnInit(): void {
-  }
+
 
 }

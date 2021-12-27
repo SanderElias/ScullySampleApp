@@ -122,7 +122,7 @@ export class ProductsService {
 
   getProductsBySubcategory(cat: string) {
     return this.products$.pipe(
-      map(pl => pl.filter(row => row.subcategory === cat).map(({ id, variation_0_thumbnail }) => ({ id, thumb:variation_0_thumbnail })))
+      map(pl => pl.filter(row => row.subcategory === cat).map(({ id, name,variation_0_thumbnail }) => ({ id, thumb:variation_0_thumbnail, name })))
     )
   }
   getProductsByBrand(brand: string) {

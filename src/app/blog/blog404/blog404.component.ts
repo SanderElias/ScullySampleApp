@@ -10,11 +10,8 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class Blog404Component implements OnInit {
+export class Blog404Component {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

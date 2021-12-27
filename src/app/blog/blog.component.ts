@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, Router, ROUTES} from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router, ROUTES } from '@angular/router';
 
 declare var ng: any;
 
@@ -11,8 +11,7 @@ declare var ng: any;
   encapsulation: ViewEncapsulation.Emulated
 
 })
-export class BlogComponent implements OnInit {
-  ngOnInit() {}
+export class BlogComponent {
 
   constructor(private router: Router, private route: ActivatedRoute) {
   }

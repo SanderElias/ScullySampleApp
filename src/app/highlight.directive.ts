@@ -1,10 +1,11 @@
-import { Directive, ElementRef, Input, NgModule } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, NgModule, OnDestroy } from '@angular/core';
 import { debounceTime, merge, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[highlight]'
 })
-export class HighlightDirective {
+export class HighlightDirective implements AfterViewInit, OnDestroy {
   hlText$ = new ReplaySubject<string>()
   update$ = new Subject<void>()
   @Input() set highlight(x: string) {
@@ -32,7 +33,7 @@ export class HighlightDirective {
     if (elm && elm.textContent) {
       if (text) {
         // TODO: make highlighting case insensitive.
-        const newHtml = elm.textContent.split(text).join(`<span class="highlight">${text}</span>`)
+        const newHtml = elm.textContent.split(text).join(`<mark class="highlight">${text}</mark>`)
         if (newHtml) {
           elm.innerHTML = newHtml
         }

@@ -40,7 +40,7 @@ import { ProductsService } from './products.service';
 
   `]
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
   subcatSelected$ = new BehaviorSubject('');
   searchFor$ = new ReplaySubject<string>(1);
   subCategories$ = this.tss.useScullyTransferState('subcat', this.prods.subCategories$);
@@ -75,8 +75,6 @@ export class ProductsComponent implements OnInit {
 
   constructor(private prods: ProductsService, private tss: TransferStateService) { }
 
-  ngOnInit(): void {
-  }
 
   updateSelected(ev: Event) {
     const target = ev.target as HTMLInputElement

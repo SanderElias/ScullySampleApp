@@ -42,7 +42,7 @@ export const config: ScullyConfig = {
   outDir: './dist/static',
   spsModulePath: './src/app/app.sps.module.ts',
   /** netlify likes to haev some spare room */
-  maxRenderThreads: cpus().length * 2,
+  maxRenderThreads: cpus().length * 3,
   routes: {
     '/blog/:slug': {
       type: 'contentFolder',

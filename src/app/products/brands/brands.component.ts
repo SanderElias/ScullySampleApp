@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TransferStateService } from '@scullyio/ng-lib';
 import { ProductsService } from '../products.service';
@@ -44,13 +44,10 @@ import { BrandOverviewComponent } from './brand-overview/brand-overview.componen
   
   `]
 })
-export class BrandsComponent implements OnInit {
+export class BrandsComponent  {
   brands$ = this.tss.useScullyTransferState('brand', this.prod.getBrands());
 
   constructor(private prod: ProductsService, private tss: TransferStateService) { }
-
-  ngOnInit(): void {
-  }
 
 }
 

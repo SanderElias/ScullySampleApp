@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TransferStateService } from '@scullyio/ng-lib';
 import { filter, map, Observable, pluck, switchMap } from 'rxjs';
@@ -71,7 +71,7 @@ import { RelatedComponent } from './related/related.component';
 
   `]
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent {
   id$ = this.route.parent?.params.pipe(pluck('id')) as Observable<number>;
 
   product$ = this.tss.useScullyTransferState(`prod`, this.id$.pipe(
@@ -100,8 +100,7 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(private prod: ProductsService, private tss: TransferStateService, private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-  }
+
 
 }
 

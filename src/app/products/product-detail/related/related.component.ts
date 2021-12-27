@@ -8,7 +8,7 @@ import { ProductsService } from '../../products.service';
   template: `
   <h2>Related Products</h2>
   <main>
-    <a *ngFor="let p of products$|async" [routerLink]="['/products',p.id]">
+    <a *ngFor="let p of products$|async" [routerLink]="['/products',p.id]" [title]="p.name">
       <img [src]="p.thumb" alt="">
 </a>
   </main>
@@ -21,15 +21,23 @@ import { ProductsService } from '../../products.service';
     background-color: #ffffff05;
     overflow-y: scroll;
   }
-  img {
+  a {
+    margin: 0.25rem;
+  }
+  a, img {
       width: 32px;
       height: 32px;
-      margin: .25rem;
+      border-radius: .1rem;
     }
+  
+  img:hover {
+    transform: scale(2.5);
+    border: 1px solid red;
+  }
 
   `]
 })
-export class RelatedComponent implements OnInit {
+export class RelatedComponent  {
   cat = new ReplaySubject<string>(1)
   @Input() set subcategory(x: string) {
     this.cat.next(x)
@@ -41,7 +49,5 @@ export class RelatedComponent implements OnInit {
 
   constructor(private prod: ProductsService, private tss:TransferStateService) { }
 
-  ngOnInit(): void {
-  }
-
+  
 }

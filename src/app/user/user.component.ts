@@ -40,7 +40,7 @@ import { UsersService } from '../users/users.service';
   </style>  
   `
 })
-export class UserComponent implements OnInit {
+export class UserComponent  {
   user$ = this.tss.useScullyTransferState('userComponent',
     combineLatest({
       users: this.users.users$,
@@ -57,7 +57,6 @@ export class UserComponent implements OnInit {
     private tss: TransferStateService
   ) { }
 
-  ngOnInit(): void {
-  }
+
 
 }

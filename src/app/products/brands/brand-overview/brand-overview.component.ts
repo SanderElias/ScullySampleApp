@@ -27,7 +27,7 @@ import { ProductsService } from '../../products.service';
     }
   `]
 })
-export class BrandOverviewComponent implements OnInit {
+export class BrandOverviewComponent {
   brandId$ = this.route.params.pipe(pluck('name'))
   brands$ = this.tss.useScullyTransferState('brandpage', this.brandId$.pipe(
     switchMap(id => this.prods.getProductsByBrand(id))
@@ -40,8 +40,5 @@ export class BrandOverviewComponent implements OnInit {
   });
 
   constructor(private route: ActivatedRoute, private prods: ProductsService, private tss: TransferStateService) { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -10,11 +10,6 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class AboutComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class AboutComponent {
 
 }

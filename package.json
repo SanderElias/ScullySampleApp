@@ -9,7 +9,8 @@
     "scully": "npx scully --scanRoutes --RSD",
     "scully:serve": "npx scully serve --handle404 index --tds",
     "server": "cd server && tsc-watch --noClear -p tsconfig.server.json --onSuccess 'node ./server.mjs' ",
-    "deploy": "npx ng build && npx scully --tds"
+    "deploy": "npx ng build && npx scully --tds",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -37,10 +38,18 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.1.1",
+    "@angular-eslint/builder": "13.0.1",
+    "@angular-eslint/eslint-plugin": "13.0.1",
+    "@angular-eslint/eslint-plugin-template": "13.0.1",
+    "@angular-eslint/schematics": "13.0.1",
+    "@angular-eslint/template-parser": "13.0.1",
     "@angular/cli": "~13.1.1",
     "@angular/compiler-cli": "~13.1.0",
     "@ngneat/aim": "^2.0.0",
     "@types/node": "^14.17.27",
+    "@typescript-eslint/eslint-plugin": "5.3.0",
+    "@typescript-eslint/parser": "5.3.0",
+    "eslint": "^8.2.0",
     "typescript": "~4.5.3"
   }
 }

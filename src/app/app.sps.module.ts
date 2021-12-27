@@ -31,15 +31,13 @@ enableProdMode();
   ],
   bootstrap: [AppComponent],
 })
-export default class AppSPSModule implements OnInit {
+export default class AppSPSModule  {
   constructor(idle: IdleMonitorService) {
     idle.init();
     // setTimeout(() => idle.fireManualMyAppReadyEvent(), 1500)
   }
 
-  ngOnInit(): void {
-    setTimeout(() => console.log('done'), 500)
-  }
+
 }
 
 
