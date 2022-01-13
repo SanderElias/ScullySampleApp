@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TransferStateService } from '@scullyio/ng-lib';
-import { combineLatest, map, pluck, tap } from 'rxjs';
+import { combineLatest, map, pluck } from 'rxjs';
 import { UsersService } from '../users/users.service';
 
 @Component({
@@ -40,7 +40,7 @@ import { UsersService } from '../users/users.service';
   </style>  
   `
 })
-export class UserComponent  {
+export class UserComponent {
   user$ = this.tss.useScullyTransferState('userComponent',
     combineLatest({
       users: this.users.users$,
@@ -50,7 +50,7 @@ export class UserComponent  {
       map(({ users, id }) => users.find(user => user.id === +id)),
     )
   )
-  
+
   constructor(
     private users: UsersService,
     private route: ActivatedRoute,

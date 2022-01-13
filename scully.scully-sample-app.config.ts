@@ -22,7 +22,9 @@ registerPlugin('router', 'getProductRoutes', async (route, config) => {
   if (!route) return [];
   const data = dataset.map((row: any) => row.id as number) //.slice(0, 500);
   const { params, createPath } = routeSplit(route);
-  return data.map((id: number) => ({ route: createPath(`${id}`) } as HandledRoute));
+  return data
+    // .slice(0, 50)
+    .map((id: number) => ({ route: createPath(`${id}`) } as HandledRoute));
 });
 
 /** 
@@ -30,9 +32,11 @@ registerPlugin('router', 'getProductRoutes', async (route, config) => {
  */
 registerPlugin('router', 'getBrandRoutes', async (route, config) => {
   if (!route) return [];
-  const data: Set<string> = dataset.reduce((r: Set<string>, row: any) => r.add(row.brand), new Set<string>()) //.slice(0, 500);
+  const data: Set<string> = dataset.reduce((r: Set<string>, row: any) => r.add(row.brand), new Set<string>());
   const { params, createPath } = routeSplit(route);
-  return Array.from(data.values()).map(id => ({ route: createPath(`${id}`) } as HandledRoute));
+  return Array.from(data.values())
+    // .slice(0, 50)
+    .map(id => ({ route: createPath(`${id}`) } as HandledRoute));
 });
 
 

@@ -1,8 +1,6 @@
-import { ThrowStmt } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from './user.interface';
-import { UsersService } from './users.service';
+import { SortFields, UsersService } from './users.service';
 
 @Component({
   selector: 'app-users',
@@ -23,7 +21,7 @@ import { UsersService } from './users.service';
   `,
 
 })
-export class UsersComponent  {
+export class UsersComponent {
 
   constructor(private users: UsersService, private router: Router) { }
 
@@ -32,8 +30,8 @@ export class UsersComponent  {
     this.users.setFilterTo(event.target.value);
   }
 
-  sort(key: keyof User) {
-     this.users.setSortTo(key);
+  sort(key: SortFields) {
+    this.users.setSortTo(key);
   }
 
 }

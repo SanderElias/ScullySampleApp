@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TransferStateService } from '@scullyio/ng-lib';
 import { UsersService } from '../users/users.service';
 
 @Component({
@@ -17,11 +16,10 @@ import { UsersService } from '../users/users.service';
   `]
 })
 export class UserSearchComponent {
-  users$ = this.tss.useScullyTransferState('userSearch', this.users.filteredUsers$)
+  users$ = this.users.filteredUsers$;
 
   constructor(
     private users: UsersService,
-    private tss: TransferStateService
   ) { }
 
 
