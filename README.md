@@ -1,4 +1,4 @@
-# ACMNov2021
+# A Scully demo opp
 
 ## A Scully demo app.
 
